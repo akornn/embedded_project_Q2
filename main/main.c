@@ -96,11 +96,11 @@ void app_main(void)
         uint8_t data[14];
         esp_err_t err = mpu_read_bytes(MPU6050_REG_ACCEL_XOUT_H, data, sizeof(data));
         if (err == ESP_OK) {
-            // Parse raw values (big-endian)
+            // Parse raw values 
             int16_t raw_ax = (int16_t)((data[0] << 8) | data[1]);
             int16_t raw_ay = (int16_t)((data[2] << 8) | data[3]);
             int16_t raw_az = (int16_t)((data[4] << 8) | data[5]);
-            // int16_t raw_temp = (int16_t)((data[6] << 8) | data[7]); // if you ever want temperature
+        
             int16_t raw_gx = (int16_t)((data[8] << 8) | data[9]);
             int16_t raw_gy = (int16_t)((data[10] << 8) | data[11]);
             int16_t raw_gz = (int16_t)((data[12] << 8) | data[13]);
