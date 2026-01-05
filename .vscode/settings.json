@@ -1,0 +1,6 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.espIdfPath": "/Users/oskarlukac/esp/v5.4.3/esp-idf",
+  "idf.toolsPath": "/Users/oskarlukac/.espressif",
+  "idf.pythonInstallPath": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
+}
