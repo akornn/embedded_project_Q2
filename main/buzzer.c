@@ -25,7 +25,6 @@ void play_pattern(int pin, int on_ms, int off_ms, int repeat)
 void app_main()
 {
     srand(time(NULL));
-
     gpio_config_t buzzer_cfg = {
         .pin_bit_mask = (1ULL << BUZZER_GPIO),
         .mode = GPIO_MODE_OUTPUT,

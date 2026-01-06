@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "buzzertest",
-    "project_version":    "1",
+    "project_version":    "91bd6ee-dirty",
     "project_path":       "/home/alex/buzzertest",
     "idf_path":           "/home/alex/esp/v5.5.1/esp-idf",
     "build_dir":          "/home/alex/buzzertest/build",
@@ -370,7 +370,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/home/alex/buzzertest/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/alex/buzzertest/main/hello_world_main.c" ],
+            "sources": [ "/home/alex/buzzertest/main/buzzer.c" ],
             "include_dirs": []
         },
         "mbedtls": {
