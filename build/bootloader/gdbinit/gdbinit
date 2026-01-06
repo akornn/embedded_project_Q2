@@ -1,0 +1,2 @@
+source /home/alex/buzzertest/build/bootloader/gdbinit/symbols
+source /home/alex/buzzertest/build/bootloader/gdbinit/connect
