@@ -1,0 +1,1 @@
+idf_component_register(SRCS "gyro.c" INCLUDE_DIRS "." REQUIRES driver)
