@@ -5,6 +5,7 @@
 #include "servo.h"
 #include "gyro.h"
 #include "ultrasonic.h"
+#include "tof.h"
 
 void app_main(void)
 {
