@@ -1,118 +1,111 @@
-<<<<<<< HEAD
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-H21 | ESP32-P4 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | --------- | -------- | -------- | -------- |
 
 # Navigate Without Sight
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+An ESP32-based assistive navigation system that helps a blindfolded user
+detect and avoid obstacles using distance and motion sensors.
 
-This projects combines different sensor in order to complete the task of navigating blindfolded person through obsticles 
+## Project Goal
+
+The goal of this project is to assist a person without visual input by
+detecting nearby obstacles and providing real-time feedback using sound
+and motion cues.
+
+
+## Features
+
+- Obstacle detection using ultrasonic and ToF sensors
+- Orientation and motion tracking via IMU
+- Real-time feedback using buzzer and servo motor
+- Modular ESP-IDF component-based architecture
+- FreeRTOS task-based design
+
 
 ## Components 
+- ESP32 (DevKit V1)
+- VL53L1x Time of Fligh sensor (up to 4m, i2c)
+- 10DOF GY87 Gyroscope/Accelerometer (i2c)
+- HC-SR04P Ultrasonic Distance sensor
+- SG90 Micro servo (180°)
+- Active buzzer
 
-## How to Use Example
+## Software & Tools
 
-Before project configuration and build, be sure to set the correct chip target using `idf.py set-target <chip_name>`.
-
-### Hardware Required
-
-* A development board with normal LED or addressable LED on-board (e.g., ESP32-S3-DevKitC, ESP32-C6-DevKitC etc.)
-* A USB cable for Power supply and programming
-
-See [Development Boards](https://www.espressif.com/en/products/devkits) for more information about it.
-
-### Configure the Project
-
-Open the project configuration menu (`idf.py menuconfig`).
-
-In the `Example Configuration` menu:
-
-* Select the LED type in the `Blink LED type` option.
-  * Use `GPIO` for regular LED
-  * Use `LED strip` for addressable LED
-* If the LED type is `LED strip`, select the backend peripheral
-  * `RMT` is only available for ESP targets with RMT peripheral supported
-  * `SPI` is available for all ESP targets
-* Set the GPIO number used for the signal in the `Blink GPIO number` option.
-* Set the blinking period in the `Blink period in ms` option.
-
-### Build and Flash
-
-Run `idf.py -p PORT flash monitor` to build, flash and monitor the project.
-
-(To exit the serial monitor, type ``Ctrl-]``.)
-
-See the [Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) for full steps to configure and use ESP-IDF to build projects.
+- ESP-IDF (v5.x recommended)
+- C language
+- Visual Studio Code
+- ESP-IDF VS Code Extension
+- FreeRTOS
 
 ## Code structure
 ```text
 ├── components/
-│   ├── buzzer/         # Buzzer control logic (PWM)
-│   ├── gyro/           # MPU6050 Accelerometer/Gyroscope (I2C)
+│   ├── buzzer/         # Buzzer control logic
+│   ├── gyro/           # 10DOF GY87 Accelerometer/Gyroscope (I2C)
 │   ├── servo/          # Servo motor control
-│   └── ultrasonic/     # HC-SR04 Ultrasonic sensor (GPIO)
+│   ├── ultrasonic/     # HC-SR04 Ultrasonic sensor
+│   └── tof/            # VL53L1x ToF (I2C)
 ├── main/
 │   ├── main.c          # Entry point and Task Orchestrator
 │   └── CMakeLists.txt  # Project-level build configuration
 └── README.md
 
-## Troubleshooting
 
-* If the LED isn't blinking, check the GPIO or the LED type selection in the `Example Configuration` menu.
+---
 
-For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
-=======
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-H21 | ESP32-H4 | ESP32-P4 | ESP32-S2 | ESP32-S3 | Linux |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | --------- | -------- | -------- | -------- | -------- | ----- |
+## 7. How It Works (High-Level Architecture)
 
-# Hello World Example
+**Purpose:** Explain system behavior without code.
 
-Starts a FreeRTOS task to print "Hello World".
+```md
+## System Overview
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+Each sensor is implemented as an independent ESP-IDF component.
+FreeRTOS tasks run in parallel to:
 
-## How to use example
+1. Measure distances
+2. Track orientation
+3. Decide feedback behavior
+4. Alert the user via sound and movement
 
-Follow detailed instructions provided specifically for this example.
+## Usage
 
-Select the instructions depending on Espressif chip installed on your development board:
+Each component exposes a simple API through its header file.
+Components are initialized in `main.c` and used inside FreeRTOS tasks.
 
-- [ESP32 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/index.html)
-- [ESP32-S2 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/index.html)
+## Build and Flash
+
+```bash
+idf.py set-target esp32
+idf.py menuconfig
+idf.py build
+idf.py flash monitor
 
 
-## Example folder contents
+---
 
-The project **hello_world** contains one source file in C language [hello_world_main.c](main/hello_world_main.c). The file is located in folder [main](main).
+## 10. Configuration
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both).
+**Purpose:** Explain pins, I2C, PWM, etc.
 
-Below is short explanation of remaining files in the project folder.
+```md
+## Configuration
 
-```
-├── CMakeLists.txt
-├── pytest_hello_world.py      Python script used for automated testing
-├── main
-│   ├── CMakeLists.txt
-│   └── hello_world_main.c
-└── README.md                  This is the file you are currently reading
-```
+- I2C pins are defined in the gyro component
+- GPIO pins for ultrasonic, servo, and buzzer are configurable
+- PWM channels are managed using ESP-IDF LEDC
 
-For more information on structure and contents of ESP-IDF projects, please refer to Section [Build System](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system.html) of the ESP-IDF Programming Guide.
+## Contributors
 
-## Troubleshooting
+- Adrians Doņeckis
+- Aleksandar Mitovski
+- Oskar Lukáč
+- Raphael Vasilišin
+- Tieme van Rees
 
-* Program upload failure
+## License
 
-    * Hardware connection is not correct: run `idf.py -p PORT monitor`, and reboot your board to see if there are any output logs.
-    * The baud rate for downloading is too high: lower your baud rate in the `menuconfig` menu, and try again.
+This project is for educational purposes.
 
-## Technical support and feedback
 
-Please use the following feedback channels:
-
-* For technical queries, go to the [esp32.com](https://esp32.com/) forum
-* For a feature request or bug report, create a [GitHub issue](https://github.com/espressif/esp-idf/issues)
-
-We will get back to you as soon as possible.
->>>>>>> origin/Alex---ABuzzer
