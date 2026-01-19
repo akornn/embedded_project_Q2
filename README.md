@@ -86,7 +86,6 @@ idf.py flash monitor
 
 - I2C pins are defined in the gyro component
 - GPIO pins for ultrasonic, servo, and buzzer are configurable
-- PWM channels are managed using ESP-IDF LEDC
 
 ## Contributors
 
