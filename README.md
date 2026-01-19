@@ -38,7 +38,8 @@ and motion cues.
 - ESP-IDF VS Code Extension
 - FreeRTOS
 
-## Code structure
+## Code Structure
+
 ```text
 ├── components/
 │   ├── buzzer/         # Buzzer control logic
@@ -51,14 +52,9 @@ and motion cues.
 │   └── CMakeLists.txt  # Project-level build configuration
 └── README.md
 
+```
 
----
 
-## 7. How It Works (High-Level Architecture)
-
-**Purpose:** Explain system behavior without code.
-
-```md
 ## System Overview
 
 Each sensor is implemented as an independent ESP-IDF component.
@@ -68,6 +64,7 @@ FreeRTOS tasks run in parallel to:
 2. Track orientation
 3. Decide feedback behavior
 4. Alert the user via sound and movement
+
 
 ## Usage
 
@@ -83,13 +80,8 @@ idf.py build
 idf.py flash monitor
 
 
----
+```
 
-## 10. Configuration
-
-**Purpose:** Explain pins, I2C, PWM, etc.
-
-```md
 ## Configuration
 
 - I2C pins are defined in the gyro component
