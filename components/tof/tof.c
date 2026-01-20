@@ -43,17 +43,17 @@ void tof_task(void *pvParameters) {
         uint16_t mm = vl53l1x_get_mm(&sensor_dev);
         ESP_LOGI(TAG, "Distance = %d mm", mm);
 
-        if (mm > 1500) {
+        if (mm > 500) {
             gpio_set_level(BUZZER_PIN, 0);
-        } else if (mm > 700) {
+        } else if (mm > 200) {
             gpio_set_level(BUZZER_PIN, 1); vTaskDelay(pdMS_TO_TICKS(20));
-            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(120));
-        } else if (mm > 350) {
+            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(240));
+        } else if (mm > 100) {
             gpio_set_level(BUZZER_PIN, 1); vTaskDelay(pdMS_TO_TICKS(20));
-            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(80));
+            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(160));
         } else {
             gpio_set_level(BUZZER_PIN, 1); vTaskDelay(pdMS_TO_TICKS(20));
-            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(30));
+            gpio_set_level(BUZZER_PIN, 0); vTaskDelay(pdMS_TO_TICKS(60));
         }
         vTaskDelay(pdMS_TO_TICKS(60));
     }
