@@ -1,0 +1,8 @@
+description: vl53l1x time of flight wrapper for esp-idf
+license: MIT
+tags:
+- tof
+- time-of-flight
+- vl53l1x
+url: https://github.com/Saleca/vl53l1x_uld_esp_wrapper.git
+version: 0.0.6
