@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "Q2_Project",
-    "project_version":    "51f2d59-dirty",
+    "project_version":    "27f9dbe-dirty",
     "project_path":       "/home/alex/Downloads/Project/embedded_project_Q2",
     "idf_path":           "/home/alex/esp/v5.5.1/esp-idf",
     "build_dir":          "/home/alex/Downloads/Project/embedded_project_Q2/build",
@@ -1250,12 +1250,12 @@
             "dir": "/home/alex/Downloads/Project/embedded_project_Q2/main",
             "type": "LIBRARY",
             "lib": "__idf_main",
-            "reqs": [ "buzzer", "servo", "gyro", "ultrasonic", "tof" ],
+            "reqs": [ "buzzer", "servo", "gyro", "ultrasonic", "tof", "vl53l1x" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/alex/Downloads/Project/embedded_project_Q2/main/main.c", "/home/alex/Downloads/Project/embedded_project_Q2/main/ultra_servo_task.c" ],
+            "sources": [ "/home/alex/Downloads/Project/embedded_project_Q2/main/main.c", "/home/alex/Downloads/Project/embedded_project_Q2/main/ultra_servo_task.c", "/home/alex/Downloads/Project/embedded_project_Q2/main/tof_ultra_task.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {
@@ -2997,7 +2997,7 @@
             "prefix": "idf",
             "dir": "/home/alex/Downloads/Project/embedded_project_Q2/main",
             "lib": "__idf_main",
-            "reqs": [ "buzzer", "servo", "gyro", "ultrasonic", "tof" ],
+            "reqs": [ "buzzer", "servo", "gyro", "ultrasonic", "tof", "vl53l1x" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
