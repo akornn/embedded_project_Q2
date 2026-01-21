@@ -3,25 +3,20 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-# If CMAKE_DISABLE_SOURCE_CHANGES is set to true and the source directory is an
-# existing directory in our source tree, calling file(MAKE_DIRECTORY) on it
-# would cause a fatal error, even though it would be a no-op.
-if(NOT EXISTS "/Users/tiemevanrees/esp/v5.5.1/esp-idf/components/bootloader/subproject")
-  file(MAKE_DIRECTORY "/Users/tiemevanrees/esp/v5.5.1/esp-idf/components/bootloader/subproject")
-endif()
 file(MAKE_DIRECTORY
-  "/Users/tiemevanrees/Project-group-6/build/bootloader"
-  "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix"
-  "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/tmp"
-  "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/src/bootloader-stamp"
-  "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/src"
-  "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/alex/esp/v5.5.1/esp-idf/components/bootloader/subproject"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/tmp"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src"
+  "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/Users/tiemevanrees/Project-group-6/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()
