@@ -8,6 +8,8 @@
 #include "ultrasonic.h"
 #include "tof.h"
 #include "ultra_servo_task.h"
+#include "ultra_oled_task.h"
+
 
 void app_main(void)
 {
@@ -21,7 +23,8 @@ void app_main(void)
     // xTaskCreate(servo_sweep_task, "servo_task", 2048, NULL, 5, NULL);
     // xTaskCreate(gyro_task,"gyro_task",2048,NULL,5,NULL);
 
-    ultra_servo_task_start();
+    // ultra_servo_task_start();
+    ultra_oled_task_start();
 
 
 }
