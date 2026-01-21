@@ -10,7 +10,7 @@ static const char *TAG = "SERVO_COMP";
 #define SERVO_MAX_PULSEWIDTH_US 2500
 #define SERVO_MIN_DEGREE        -90
 #define SERVO_MAX_DEGREE        90
-#define SERVO_PULSE_GPIO             0 
+#define SERVO_PULSE_GPIO             18
 #define SERVO_TIMEBASE_RESOLUTION_HZ 1000000
 #define SERVO_TIMEBASE_PERIOD        20000
 
