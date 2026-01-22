@@ -38,8 +38,8 @@ static const char *TAG = "DUAL_CONTROL";
 #define LOG_CLOSE_MS       150   // <=50cm
 
 /* ===================== PIN DEFINITIONS ===================== */
-#define TOF_SDA_GPIO 21
-#define TOF_SCL_GPIO 22
+#define TOF_SDA_GPIO 23
+#define TOF_SCL_GPIO 19
 #define US_TRIG_GPIO 26
 #define US_ECHO_GPIO 27
 #define BUZZER_GPIO  25
@@ -197,8 +197,9 @@ void tof_ultra_task_start(void) {
     gpio_set_level(BUZZER_GPIO, 0);
 
     // ToF / I2C Setup
-    s_i2c.sda_gpio = TOF_SDA_GPIO;
-    s_i2c.scl_gpio = TOF_SCL_GPIO;
+    s_i2c.i2c_port = I2C_NUM_0;
+    s_i2c.sda_gpio  = TOF_SDA_GPIO;
+    s_i2c.scl_gpio  = TOF_SCL_GPIO;
     s_sensor.i2c_handle = &s_i2c;
 
     if (vl53l1x_init(&s_sensor)) {

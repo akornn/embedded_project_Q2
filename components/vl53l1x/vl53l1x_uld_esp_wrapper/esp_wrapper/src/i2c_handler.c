@@ -8,6 +8,11 @@ static const char *TAG = "I2C_HANDLER";
 
 bool i2c_master_init(vl53l1x_i2c_handle_t *i2c_handle)
 {
+    if (i2c_handle->initialized && i2c_handle->bus_handle) {
+        ESP_LOGI(TAG, "I2C already initialized (port=%d)", i2c_handle->i2c_port);
+        return true;
+    }
+
     i2c_master_bus_config_t bus_config = {
         .clk_source = I2C_CLK_SRC_DEFAULT,
         .i2c_port = i2c_handle->i2c_port,
@@ -16,12 +21,20 @@ bool i2c_master_init(vl53l1x_i2c_handle_t *i2c_handle)
         .glitch_ignore_cnt = 7,
         .flags = {
             .enable_internal_pullup = true,
-            .allow_pd = 0}};
+            .allow_pd = 0
+        }
+    };
 
     esp_err_t err = i2c_new_master_bus(&bus_config, &i2c_handle->bus_handle);
-    if (err != ESP_OK)
-    {
-        ESP_LOGE(TAG, "failed to initialize i2c", esp_err_to_name(err));
+
+    if (err == ESP_ERR_INVALID_STATE) {
+        // Bus already exists -> reuse it
+        ESP_LOGW(TAG, "I2C bus already acquired (port=%d). Reusing existing bus handle.", i2c_handle->i2c_port);
+        err = i2c_master_get_bus_handle(i2c_handle->i2c_port, &i2c_handle->bus_handle);
+    }
+
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "failed to initialize i2c: %s", esp_err_to_name(err));
         return false;
     }
 
