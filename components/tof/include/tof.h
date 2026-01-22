@@ -1,16 +1,16 @@
-#pragma once
-#include <stdint.h>
-#include "esp_err.h"
+#ifndef TOF_H
+#define TOF_H
 
-// Minimal config: just pins
+#include "esp_err.h"
+#include "driver/i2c_master.h"
+
 typedef struct {
-    int sda_gpio;
-    int scl_gpio;
     int buzzer_gpio;
 } tof_config_t;
 
-// Init sensor + GPIO + create tasks
-esp_err_t tof_init_and_start(const tof_config_t *cfg);
+// UPDATED: Added i2c_master_bus_handle_t to match tof.c
+esp_err_t tof_init_and_start(i2c_master_bus_handle_t bus_handle, const tof_config_t *cfg);
 
-// Read latest distance (in mm)
 esp_err_t tof_get_latest_mm(uint16_t *out_mm);
+
+#endif

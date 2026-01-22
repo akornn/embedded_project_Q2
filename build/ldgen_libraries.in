@@ -160,6 +160,7 @@ $<TARGET_FILE:__idf_json>
 $<TARGET_FILE:idf::buzzer>
 $<TARGET_FILE:idf::servo>
 $<TARGET_FILE:idf::gyro>
+$<TARGET_FILE:__idf_mqtt>
 $<TARGET_FILE:idf::ultrasonic>
 $<TARGET_FILE:idf::vl53l1x>
 $<TARGET_FILE:idf::tof>

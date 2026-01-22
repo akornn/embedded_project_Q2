@@ -160,6 +160,7 @@
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/libbuzzer.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/servo/libservo.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/gyro/libgyro.a
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/mqtt/libmqtt.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/ultrasonic/libultrasonic.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/vl53l1x/libvl53l1x.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/tof/libtof.a

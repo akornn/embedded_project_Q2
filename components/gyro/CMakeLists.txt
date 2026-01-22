@@ -1,1 +1,1 @@
-idf_component_register(SRCS "gyro.c" INCLUDE_DIRS "." REQUIRES driver)
+idf_component_register(SRCS "gyro.c" INCLUDE_DIRS "." REQUIRES driver nvs_flash esp_netif esp_wifi mqtt)

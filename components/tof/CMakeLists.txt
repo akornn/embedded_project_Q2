@@ -1,5 +1,5 @@
 idf_component_register(
     SRCS "tof.c"
     INCLUDE_DIRS "include"
-    REQUIRES driver freertos vl53l1x
+    REQUIRES driver freertos vl53l1x nvs_flash esp_netif esp_wifi mqtt
 )
