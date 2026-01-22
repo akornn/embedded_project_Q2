@@ -838,6 +838,13 @@
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/wifi_provisioning/CMakeFiles/install.dir
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/wifi_provisioning/CMakeFiles/install/local.dir
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/wifi_provisioning/CMakeFiles/install/strip.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/__idf_i2c_bus.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/edit_cache.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/rebuild_cache.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/list_install_components.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/install.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/install/local.dir
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/CMakeFiles/install/strip.dir
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/CMakeFiles/__idf_buzzer.dir
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/CMakeFiles/edit_cache.dir
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/CMakeFiles/rebuild_cache.dir

@@ -157,6 +157,7 @@
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/spiffs/libspiffs.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/json/libjson.a
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/libi2c_bus.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/libbuzzer.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/servo/libservo.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/gyro/libgyro.a
@@ -164,6 +165,7 @@
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/vl53l1x/libvl53l1x.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/tof/libtof.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/vl53l1x/libvl53l1x.a
+/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/libi2c_bus.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/main/libmain.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/libbuzzer.a
 /home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/servo/libservo.a

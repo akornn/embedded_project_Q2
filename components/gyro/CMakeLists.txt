@@ -1,1 +1,1 @@
-idf_component_register(SRCS "gyro.c" INCLUDE_DIRS "." REQUIRES driver)
+idf_component_register(SRCS "mpu6050_new.c" INCLUDE_DIRS "." REQUIRES driver)

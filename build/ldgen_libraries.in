@@ -157,6 +157,7 @@ $<TARGET_FILE:idf::rt>
 $<TARGET_FILE:idf::spiffs>
 $<TARGET_FILE:idf::wifi_provisioning>
 $<TARGET_FILE:__idf_json>
+$<TARGET_FILE:idf::i2c_bus>
 $<TARGET_FILE:idf::buzzer>
 $<TARGET_FILE:idf::servo>
 $<TARGET_FILE:idf::gyro>
@@ -164,6 +165,7 @@ $<TARGET_FILE:idf::ultrasonic>
 $<TARGET_FILE:idf::vl53l1x>
 $<TARGET_FILE:idf::tof>
 $<TARGET_FILE:__idf_vl53l1x>
+$<TARGET_FILE:__idf_i2c_bus>
 $<TARGET_FILE:idf::main>
 $<TARGET_FILE:__idf_buzzer>
 $<TARGET_FILE:__idf_servo>

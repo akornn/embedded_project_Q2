@@ -559,6 +559,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/i2c_bus/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("/home/alex/Downloads/Project/embedded_project_Q2/build/esp-idf/buzzer/cmake_install.cmake")
 endif()
 
