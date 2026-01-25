@@ -18,8 +18,7 @@ void app_main(void) {
         .glitch_ignore_cnt = 7,
         .flags.enable_internal_pullup = true,
     };
-    i2c_master_bus_handle_t bus_handle;
-    
+    i2c_master_bus_handle_t bus_handle;    
 
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &bus_handle));
     ESP_LOGI(TAG, "Shared I2C bus initialized on GPIO 21/22 (I2C_NUM_1)");

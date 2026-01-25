@@ -6,8 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
-
-
+#include "driver/gpio.h"
 
 #include "esp_system.h"
 #include "esp_log.h"
@@ -18,13 +17,14 @@
 #include "esp_event.h"
 
 #include "mqtt_client.h"
-#include "driver/i2c_master.h" // UPDATED: Using New Gen Driver
+#include "driver/i2c_master.h"
 
 /* ===================== USER CONFIG ===================== */
 #define WIFI_SSID      "AndroidAPDF17"
 #define WIFI_PASS      "sigmaboy"
 #define MQTT_BROKER_URI "mqtt://51.107.4.193:1883"
 #define MQTT_TOPIC      "devices/esp32-001/imu"
+#define MQTT_COMMAND_TOPIC "devices/esp32-001/command"
 
 /* ===================== MPU6050 CONFIG ===================== */
 #define MPU6050_ADDR               0x68
@@ -36,7 +36,9 @@
 #define MPU6050_ACCEL_SENS_2G      16384.0f
 #define MPU6050_GYRO_SENS_2000     16.4f
 
-// Calibrated offsets (Adjust these based on your specific sensor)
+#define BUZZER_PIN                 25
+
+// Calibrated offsets
 #define AX_OFFSET  -742
 #define AY_OFFSET  1180
 #define AZ_OFFSET  978
@@ -53,10 +55,9 @@ static const char *TAG = "GYRO_NG";
 
 static volatile bool wifi_connected = false;
 static volatile bool mqtt_connected = false;
+static volatile bool buzzer_enabled = true;
 
 static QueueHandle_t imu_data_queue = NULL;
-
-// NEW: Handle for this specific MPU6050 device on the I2C bus
 static i2c_master_dev_handle_t mpu6050_handle;
 
 typedef struct {
@@ -107,13 +108,64 @@ void wifi_init_sta(void) {
     ESP_ERROR_CHECK(esp_wifi_start());
 }
 
+/* ===================== BUZZER CONTROL ===================== */
+bool is_buzzer_enabled(void) {
+    return buzzer_enabled;
+}
+
+void set_buzzer_enabled(bool enabled) {
+    buzzer_enabled = enabled;
+    ESP_LOGI(TAG, "Buzzer %s", enabled ? "ENABLED" : "DISABLED");
+}
+
 /* ===================== MQTT LOGIC ===================== */
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base,
                                int32_t event_id, void *event_data) {
+    esp_mqtt_event_handle_t event = event_data;
+    
     if (event_id == MQTT_EVENT_CONNECTED) {
+        ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         mqtt_connected = true;
+        
+        // Subscribe to command topic
+        esp_mqtt_client_subscribe(mqtt_client, MQTT_COMMAND_TOPIC, 1);
+        ESP_LOGI(TAG, "Subscribed to command topic: %s", MQTT_COMMAND_TOPIC);
+        
     } else if (event_id == MQTT_EVENT_DISCONNECTED) {
+        ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
         mqtt_connected = false;
+        
+    } else if (event_id == MQTT_EVENT_DATA) {
+        // Handle incoming commands
+        char topic[64];
+        char data[64];
+        ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+        
+        // Get topic
+        int topic_len = event->topic_len < 63 ? event->topic_len : 63;
+        memcpy(topic, event->topic, topic_len);
+        topic[topic_len] = '\0';
+        
+        // Get data
+        int data_len = event->data_len < 63 ? event->data_len : 63;
+        memcpy(data, event->data, data_len);
+        data[data_len] = '\0';
+        
+        ESP_LOGI(TAG, "Received: Topic=%s, Data=%s", topic, data);
+        
+        // Check if this is a command for our device
+        if (strcmp(topic, MQTT_COMMAND_TOPIC) == 0) {
+            if (strcmp(data, "buzzer_enable") == 0) {
+                ESP_LOGI(TAG, "BUZZER ENABLE COMMAND");
+                set_buzzer_enabled(true);
+            } 
+            else if (strcmp(data, "buzzer_disable") == 0) {
+                ESP_LOGI(TAG, "BUZZER DISABLE COMMAND");
+                set_buzzer_enabled(false);
+                // Immediately turn off buzzer
+                gpio_set_level(BUZZER_PIN, 0);
+            }
+        }
     }
 }
 
@@ -126,24 +178,21 @@ static void mqtt_app_start(void) {
     esp_mqtt_client_start(mqtt_client);
 }
 
-/* ===================== NEW I2C PRIMITIVES ===================== */
+/* ===================== I2C FUNCTIONS ===================== */
 static esp_err_t mpu_write(uint8_t reg, uint8_t value) {
     uint8_t data[2] = {reg, value};
-    // Transmit to the specific device handle
     return i2c_master_transmit(mpu6050_handle, data, 2, -1);
 }
 
 static esp_err_t mpu_read_bytes(uint8_t reg, uint8_t *data, size_t len) {
-    // Write register address, then read back data
     return i2c_master_transmit_receive(mpu6050_handle, &reg, 1, data, len, -1);
 }
 
 static esp_err_t mpu_init(void) {
     vTaskDelay(pdMS_TO_TICKS(100));
-    // Wake up the MPU6050
     if (mpu_write(MPU6050_REG_PWR_MGMT_1, 0x00) != ESP_OK) return ESP_FAIL;
-    mpu_write(MPU6050_REG_ACCEL_CONFIG, 0x00); // 2G
-    mpu_write(MPU6050_REG_GYRO_CONFIG, 0x18);  // 2000 deg/s
+    mpu_write(MPU6050_REG_ACCEL_CONFIG, 0x00);
+    mpu_write(MPU6050_REG_GYRO_CONFIG, 0x18);
     return ESP_OK;
 }
 
@@ -179,10 +228,8 @@ static void orientation_filter_update(orientation_filter_t *f, float gx, float g
 
 /* ===================== TASKS ===================== */
 void imu_task(void *pvParameters) {
-    // 1. Recover the Bus Handle passed from app_main
     i2c_master_bus_handle_t bus_handle = (i2c_master_bus_handle_t)pvParameters;
 
-    // 2. Add MPU6050 to the Shared Bus
     i2c_device_config_t dev_cfg = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = MPU6050_ADDR,
@@ -190,7 +237,6 @@ void imu_task(void *pvParameters) {
     };
     ESP_ERROR_CHECK(i2c_master_bus_add_device(bus_handle, &dev_cfg, &mpu6050_handle));
 
-    // 3. Initialize Sensor Hardware
     while (mpu_init() != ESP_OK) {
         ESP_LOGE(TAG, "MPU6050 Init failed, retrying...");
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -220,17 +266,37 @@ void imu_task(void *pvParameters) {
 }
 
 void mqtt_task(void *pvParameters) {
+    // Initialize buzzer GPIO
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << BUZZER_PIN),
+        .mode = GPIO_MODE_OUTPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE
+    };
+    gpio_config(&io_conf);
+    gpio_set_level(BUZZER_PIN, 0);
+    ESP_LOGI(TAG, "Buzzer initialized on GPIO %d", BUZZER_PIN);
+    
     imu_data_queue = xQueueCreate(10, sizeof(imu_data_t));
+    
     while (!wifi_connected) vTaskDelay(pdMS_TO_TICKS(1000));
+    ESP_LOGI(TAG, "WiFi connected, starting MQTT");
+    
     mqtt_app_start();
+    
     while (!mqtt_connected) vTaskDelay(pdMS_TO_TICKS(1000));
+    ESP_LOGI(TAG, "MQTT connected, publishing IMU data");
     
     imu_data_t data;
     while (1) {
         if (xQueueReceive(imu_data_queue, &data, portMAX_DELAY)) {
             char payload[128];
-            snprintf(payload, sizeof(payload), "{\"roll\":%.2f,\"pitch\":%.2f,\"yaw\":%.2f}", data.roll, data.pitch, data.yaw);
-            esp_mqtt_client_publish(mqtt_client, MQTT_TOPIC, payload, 0, 1, 0);
+            snprintf(payload, sizeof(payload), 
+                     "{\"roll\":%.2f,\"pitch\":%.2f,\"yaw\":%.2f}", 
+                     data.roll, data.pitch, data.yaw);
+            
+            int msg_id = esp_mqtt_client_publish(mqtt_client, MQTT_TOPIC, payload, 0, 1, 0);
         }
     }
 }

@@ -9,11 +9,16 @@
 #include "esp_err.h"
 #include "driver/gpio.h"
 
-#include "ultrasonic.h"
+// #include "ultrasonic.h"
+#include "ultrasonic_custom.h"
 #include "vl53l1x.h"
 #include "servo.h"
 
 static const char *TAG = "DUAL_CONTROL";
+
+/* ===================== EXTERNAL BUZZER CONTROL ===================== */
+// These functions are defined in gyro.c
+extern bool is_buzzer_enabled(void);
 
 /* ===================== VIBRATION CONTROL ===================== */
 // Vibrate only at 80cm and closer. Ramp speed until 50cm, then max speed.
@@ -52,13 +57,20 @@ static vl53l1x_i2c_handle_t s_i2c = VL53L1X_I2C_INIT;
 static vl53l1x_handle_t s_sensor = VL53L1X_INIT;
 static vl53l1x_device_handle_t s_dev = VL53L1X_DEVICE_INIT;
 
-static ultrasonic_sensor_t s_ultra_dev = {
-    .trigger_pin = US_TRIG_GPIO,
-    .echo_pin = US_ECHO_GPIO
-};
+// static ultrasonic_sensor_t s_ultra_dev = {
+//     .trigger_pin = US_TRIG_GPIO,
+//     .echo_pin = US_ECHO_GPIO
+// };
 
 /* ===================== HELPERS ===================== */
 static void alert_beep(int on_ms, int off_ms) {
+    // Check if buzzer is enabled
+    if (!is_buzzer_enabled()) {
+        // Make sure buzzer is off
+        gpio_set_level(BUZZER_GPIO, 0);
+        return;
+    }
+    
     gpio_set_level(BUZZER_GPIO, 1);
     vTaskDelay(pdMS_TO_TICKS(on_ms));
     gpio_set_level(BUZZER_GPIO, 0);
@@ -85,27 +97,34 @@ static void tof_buzzer_task(void *pv) {
 
 /* ===================== TASK 2: ULTRASONIC SERVO ===================== */
 static void ultrasonic_servo_task(void *pv) {
-    (void)pv;
+(void)pv;
 
     servo_init();
     servo_set_angle(0);
-
+    
+    // Initialize YOUR ultrasonic code
+    ultrasonic_custom_init(US_TRIG_GPIO, US_ECHO_GPIO);
+    
+    // Give it time to stabilize
+    vTaskDelay(pdMS_TO_TICKS(100));
+    
     float ema_cm = 0.0f;
     bool ema_init = false;
-
     TickType_t last_good = 0;
     TickType_t last_log  = 0;
 
     while (1) {
-        uint32_t cm_raw = 0;
-        esp_err_t res = ultrasonic_measure_cm(&s_ultra_dev, ULTRA_MAX_VALID_CM, &cm_raw);
-
-        bool valid = (res == ESP_OK) &&
-                     (cm_raw >= ULTRA_MIN_VALID_CM) &&
-                     (cm_raw <= ULTRA_MAX_VALID_CM);
-
+        // Use YOUR ultrasonic code
+        float distance_cm = ultrasonic_custom_get_distance_cm();
+        
+        bool valid = (distance_cm > 0) &&
+                     (distance_cm >= ULTRA_MIN_VALID_CM) && 
+                     (distance_cm <= ULTRA_MAX_VALID_CM);
+        
+        uint32_t cm_raw = (uint32_t)distance_cm;
+        
         if (valid) {
-            float x = (float)cm_raw;
+            float x = distance_cm;
 
             if (!ema_init) {
                 ema_cm = x;
@@ -119,7 +138,6 @@ static void ultrasonic_servo_task(void *pv) {
                     ema_cm = (ULTRA_EMA_ALPHA * x) + ((1.0f - ULTRA_EMA_ALPHA) * ema_cm);
                     last_good = xTaskGetTickCount();
                 }
-                // else spike -> ignore sample
             }
         }
 
@@ -131,8 +149,9 @@ static void ultrasonic_servo_task(void *pv) {
             // still log occasionally so you can see what's happening
             TickType_t now = xTaskGetTickCount();
             if ((now - last_log) >= pdMS_TO_TICKS(LOG_FAR_MS)) {
-                ESP_LOGI(TAG, "Ultra res=%s raw=%lu cm | filt:--- (no recent valid)",
-                         esp_err_to_name(res), (unsigned long)cm_raw);
+                // CHANGE THIS LINE to show the actual error string:
+                ESP_LOGI(TAG, "Ultra res=%s (error code: 0x%x) raw=%lu cm | filt:--- (no recent valid)",
+                         esp_err_to_name(res), res, (unsigned long)cm_raw);
                 last_log = now;
             }
 
@@ -210,10 +229,11 @@ void tof_ultra_task_start(void) {
     }
 
     // Ultrasonic Setup
-    esp_err_t uerr = ultrasonic_init(&s_ultra_dev);
-    if (uerr != ESP_OK) {
-        ESP_LOGE(TAG, "Ultrasonic init failed: %s", esp_err_to_name(uerr));
-    }
+    // esp_err_t uerr = ultrasonic_init(&s_ultra_dev);
+    // if (uerr != ESP_OK) {
+        // vTaskDelay(pdMS_TO_TICKS(100));  // wait for logger to be ready
+        // ESP_LOGE(TAG, "Ultrasonic init failed: %s", esp_err_to_name(uerr));
+    // }
 
     // Tasks
     xTaskCreate(tof_buzzer_task, "tof_buzzer", 3072, NULL, 5, NULL);
