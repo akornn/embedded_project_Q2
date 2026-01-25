@@ -1,0 +1,2 @@
+source /home/alex/Downloads/Project/embedded_project_Q2/build/bootloader/gdbinit/symbols
+source /home/alex/Downloads/Project/embedded_project_Q2/build/bootloader/gdbinit/connect
