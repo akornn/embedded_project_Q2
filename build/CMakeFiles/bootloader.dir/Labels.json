@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/CMakeFiles/bootloader"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/CMakeFiles/bootloader.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "/home/alex/Downloads/Project/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "/home/shrimp/Documents/Github/embedded_project_Q2/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 

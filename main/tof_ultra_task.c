@@ -15,6 +15,10 @@
 
 static const char *TAG = "DUAL_CONTROL";
 
+/* ===================== EXTERNAL BUZZER CONTROL ===================== */
+// These functions are defined in gyro.c
+extern bool is_buzzer_enabled(void);
+
 /* ===================== VIBRATION CONTROL ===================== */
 // Vibrate only at 80cm and closer. Ramp speed until 50cm, then max speed.
 #define VIB_ON_CM          80    // start vibrating at 80cm and closer
@@ -59,6 +63,13 @@ static ultrasonic_sensor_t s_ultra_dev = {
 
 /* ===================== HELPERS ===================== */
 static void alert_beep(int on_ms, int off_ms) {
+    // Check if buzzer is enabled
+    if (!is_buzzer_enabled()) {
+        // Make sure buzzer is off
+        gpio_set_level(BUZZER_GPIO, 0);
+        return;
+    }
+    
     gpio_set_level(BUZZER_GPIO, 1);
     vTaskDelay(pdMS_TO_TICKS(on_ms));
     gpio_set_level(BUZZER_GPIO, 0);
