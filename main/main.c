@@ -7,8 +7,10 @@
 #include "oled_ssd1306.h"
 #include "freertos/queue.h"
 #include "tof_ultra_task.h"
+#include "pir_led.h"   
 
 static const char *TAG = "MAIN_APP";
+
 void oled_task(void *pvParameters)
 {
     i2c_master_bus_handle_t bus =
@@ -50,13 +52,25 @@ void app_main(void)
     ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &bus_handle));
     ESP_LOGI(TAG, "Shared I2C bus initialized on GPIO 21/22 (I2C_NUM_1)");
 
-    // 3. Start Tasks - Pass 'bus_handle' to any task that needs I2C
-    xTaskCreatePinnedToCore(imu_task, "imu_task", 4096, (void *)bus_handle, 5, NULL, 0);
-    xTaskCreatePinnedToCore(oled_task, "oled_task", 4096, (void *)bus_handle, 4, NULL, 1);
+    // // 3. Start Tasks - Pass 'bus_handle' to any task that needs I2C
+    // xTaskCreatePinnedToCore(imu_task, "imu_task", 4096, (void *)bus_handle, 5, NULL, 0);
+    // xTaskCreatePinnedToCore(oled_task, "oled_task", 4096, (void *)bus_handle, 4, NULL, 1);
 
-    wifi_init_sta();
-    xTaskCreatePinnedToCore(mqtt_task, "mqtt_task", 4096, NULL, 3, NULL, 1);
+    // wifi_init_sta();
+    // xTaskCreatePinnedToCore(mqtt_task, "mqtt_task", 4096, NULL, 3, NULL, 1);
 
+    // tof_ultra_task_start();
 
-    tof_ultra_task_start();
+    
+    static pir_led_cfg_t pir_cfg = {
+    .pir_gpio         = GPIO_NUM_18,
+    .led_gpio         = GPIO_NUM_19,
+    .poll_ms          = 100,
+    .hold_ms          = 1000,
+    .pir_active_high  = true,   // HC-SR501 typically HIGH on motion
+    .led_active_high  = false   
+    };
+
+    pir_led_init(&pir_cfg);
+    xTaskCreatePinnedToCore(pir_led_task, "pir_led_task", 2048, NULL, 4, NULL, 1);
 }
